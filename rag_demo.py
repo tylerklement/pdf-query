@@ -27,15 +27,24 @@ def print_answer(answer):
     print('Text:\n', answer['context']['section'].text, '\n')
 
 
-def main(pdf_dir, tesseract_path, queries):
+def build_index(pdf_dir, tesseract_path):
     pdf_extractor = PDFExtractor(tesseract_path)
     pdfs = pdf_extractor.load_pdfs_as_text(pdf_dir)
     documents = [Document(text, {'filename': fname}) for fname, text in pdfs.items()]
     vector_index = VectorIndex()
     vector_index.build_index(documents)
-    rag_model = RAGModel(vector_index)
     print("Documents loaded.")
+    return vector_index
 
+
+def load_rag_model(pdf_dir, tesseract_path):
+    vector_index = build_index(pdf_dir, tesseract_path)
+    rag_model = RAGModel(vector_index)
+    return rag_model
+
+
+def main(pdf_dir, tesseract_path, queries):
+    rag_model = load_rag_model(pdf_dir, tesseract_path)
     if len(queries) == 0:
         # get user input
         while True:
