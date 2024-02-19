@@ -50,20 +50,23 @@ class VectorIndex:
         self.documents = []
         self.all_sections = []
         self.vecs = None
-    
+
     def build_index(self, documents):
+        '''
+        Build the vector index using SBERT.
+        '''
         self.documents = documents
         vectors = []
         all_sections = []
         for doc in tqdm(documents, desc='Encoding documents'):
-            sections = VectorIndex.split_doc(doc)
+            sections = self.split_doc(doc)
             section_vecs = self.model.encode([section.text for section in sections],
                                              convert_to_tensor=False)
             vectors.extend(section_vecs)
             all_sections.extend(sections)
         self.all_sections = all_sections
         self.vecs = np.vstack(vectors)
-    
+
     def search(self, query, n=-1):
         '''
         Search the index for the N-most similar sections/chunks to the query.
