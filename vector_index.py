@@ -79,8 +79,7 @@ class VectorIndex:
             return results
         return results[:n]
 
-    @classmethod
-    def split_doc(doc, chunk_size=1000, overlap=150):
+    def split_doc(self, doc, chunk_size=1000, overlap=150):
         '''
         Splits a document into overlapping chunks.
         '''
@@ -95,7 +94,7 @@ class VectorIndex:
             chunks.append(Section(text=doc.text[start:end], parent_document=doc))
             start = end
         return chunks
-    
+
     def save(self, savedir):
         '''
         Save index to disk.
@@ -107,7 +106,7 @@ class VectorIndex:
             data = {'documents': self.documents, 'all_sections': self.all_sections}
             pickle.dump(data, f)
         np.save(index_vecs_fname, self.vecs)
-    
+
     @classmethod
     def load(cls, savedir):
         '''
