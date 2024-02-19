@@ -1,7 +1,7 @@
 # PDF Query
 
 ## Overview
-This script provides a powerful tool for extracting text from PDF documents in a specified directory and answering questions based on the content of these documents. It utilizes [Retrieval Augmented Generation (RAG)](https://arxiv.org/abs/2005.11401), with an SBERT vector index for efficient searching and a RAG-tuned language model for generating answers to queries.
+This repository contains a program which uses generative AI to find information from a given folder of PDFs when provided with a question. It utilizes [Retrieval Augmented Generation (RAG)](https://arxiv.org/abs/2005.11401), with an SBERT vector index for efficient retrieval and a RAG-tuned language model for generating answers to queries.
 
 ## Requirements
 - Python 3.x
@@ -29,6 +29,6 @@ The script is executed from the command line and takes several arguments:
 If no questions are provided through the command line, the script enters an interactive mode, prompting the user to input questions manually.
 
 ## How It Works
-1. **Index Building**: The script first reads all PDF documents in the provided directory, extracting their text using PyMuPDF or Tesseract OCR. It chunks those using a rolling overlapping window, and encodes those chunks to vectors for efficient querying.
+1. **Index Building**: The script first reads all PDF documents in the provided directory, extracting their text using PyMuPDF or Tesseract OCR. It chunks those using a rolling overlapping window, and encodes those chunks to vectors with SBERT for efficient querying.
 2. **Query Processing**: It then either takes user-provided questions or enters an interactive mode for question input. It encodes the question using SBERT and then retrieves the most similar section of text from the indexed documents.
 3. **Answer Generation**: Using a language model, the script generates an answer based on the context of the retrieved text section.
