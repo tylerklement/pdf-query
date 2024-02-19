@@ -37,6 +37,11 @@ class Section:
 
 
 class VectorIndex:
+    '''
+    An index which splits documents into chunks, computes their SBERT vectors, 
+    and stores those for retrieval querying.
+    '''
+
     INDEX_SAVE_NAME = "%s/index"
     INDEX_VECS_SAVE_NAME = "%s/index_vecs"
 
@@ -60,15 +65,25 @@ class VectorIndex:
         self.vecs = np.vstack(vectors)
     
     def search(self, query, n=-1):
+        '''
+        Search the index for the N-most similar sections/chunks to the query.
+        '''
         query_vec = self.model.encode(query, convert_to_tensor=False)
         scores = np.dot(self.vecs, query_vec.T)
         best_matches_indices = np.argsort(scores)[::-1]
-        results = [{'section': self.all_sections[i], 'score': scores[i]} for i in best_matches_indices]
+        results = [
+            {'section': self.all_sections[i], 'score': scores[i]} \
+                for i in best_matches_indices
+        ]
         if n == -1:
             return results
         return results[:n]
 
+    @classmethod
     def split_doc(doc, chunk_size=1000, overlap=150):
+        '''
+        Splits a document into overlapping chunks.
+        '''
         if overlap * 2 >= chunk_size:
             raise ValueError("Overlap must be less than half the chunk size.")
         chunks = []
@@ -82,6 +97,9 @@ class VectorIndex:
         return chunks
     
     def save(self, savedir):
+        '''
+        Save index to disk.
+        '''
         os.makedirs(savedir, exist_ok=True)
         index_fname = self.INDEX_SAVE_NAME % savedir
         index_vecs_fname = self.INDEX_VECS_SAVE_NAME % savedir
@@ -92,6 +110,9 @@ class VectorIndex:
     
     @classmethod
     def load(cls, savedir):
+        '''
+        Load index from disk.
+        '''
         instance = cls()
         index_fname = VectorIndex.INDEX_SAVE_NAME % savedir
         index_vecs_fname = VectorIndex.INDEX_VECS_SAVE_NAME % savedir

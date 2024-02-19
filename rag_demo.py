@@ -7,11 +7,17 @@ from vector_index import VectorIndex, Document
 
 
 class RAGModel:
+    '''
+    Class which accepts a vector index and enables querying the index with questions.
+    '''
     def __init__(self, vector_index, model_name="llmware/bling-1b-0.1"):
         self.prompter = Prompt().load_model(model_name)
         self.vector_index = vector_index
 
     def query(self, query, temperature=0.0):
+        '''
+        Main query method to ask a question regarding the index documents.
+        '''
         retrieved_result = self.vector_index.search(query, n=1)[0]
         output = self.prompter.prompt_main(query,
                                            context=retrieved_result['section'].text,
@@ -61,10 +67,23 @@ def main(pdf_dir, tesseract_path, queries):
 
 
 if __name__ == '''__main__''':
-    parser = argparse.ArgumentParser(description='An application that reads all PDFs in a provided directory, and answers questions about them.')
-    parser.add_argument('--pdf-directory', type=str, required=True, help='Path to the PDF directory')
-    parser.add_argument('--tesseract-path', type=str, required=True, help='Path to the Tesseract executable (e.g. /opt/homebrew/bin/tesseract)')
-    parser.add_argument('--questions', metavar='Q', type=str, nargs='*', help='A list of questions')
+    parser = argparse.ArgumentParser(
+        description='An application that reads all PDFs in a provided directory, ' + \
+                    'and answers questions about them.'
+    )
+    parser.add_argument('--pdf-directory',
+                        type=str,
+                        required=True,
+                        help='Path to the PDF directory')
+    parser.add_argument('--tesseract-path',
+                        type=str,
+                        required=True,
+                        help='Path to the Tesseract executable (e.g. /opt/homebrew/bin/tesseract)')
+    parser.add_argument('--questions',
+                        metavar='Q',
+                        type=str,
+                        nargs='*',
+                        help='A list of questions')
 
     args = parser.parse_args()
     questions = args.questions if args.questions else []

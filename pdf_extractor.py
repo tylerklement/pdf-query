@@ -8,6 +8,10 @@ from tqdm import tqdm
 
 
 class PDFExtractor:
+    '''
+    A tool for extracting text from all PDFs in a folder.
+    If not enough text was retrieved, it uses OCR with Tesseract.
+    '''
     def __init__(self, tesseract_executable_loc):
         pytesseract.pytesseract.tesseract_cmd = tesseract_executable_loc
 
@@ -23,7 +27,7 @@ class PDFExtractor:
                 else:
                     # If direct text extraction yields little text, use OCR
                     pix = page.get_pixmap()
-                    img_bytes = pix.tobytes("png")  # Convert the pixmap to bytes
+                    img_bytes = pix.tobytes("png")
                     img = Image.open(io.BytesIO(img_bytes))
                     text += pytesseract.image_to_string(img)
         return text
