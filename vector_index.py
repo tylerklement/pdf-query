@@ -7,6 +7,9 @@ from tqdm import tqdm
 
 
 class Document:
+    '''
+    Represents a document to be indexed by the VectorIndexer.
+    '''
     def __init__(self, text, metadata):
         self.text = text
         self.metadata = metadata
@@ -18,6 +21,10 @@ class Document:
         return str(self)
 
 class Section:
+    '''
+    Represents a section of a document, which is ultimately what actually gets indexed
+    by the VectorIndexer (due to splitting/chunking).
+    '''
     def __init__(self, text, parent_document):
         self.text = text
         self.parent_document = parent_document

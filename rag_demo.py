@@ -37,9 +37,9 @@ def build_index(pdf_dir, tesseract_path):
     return vector_index
 
 
-def load_rag_model(pdf_dir, tesseract_path):
+def load_rag_model(pdf_dir, tesseract_path, llm_model="llmware/bling-1b-0.1"):
     vector_index = build_index(pdf_dir, tesseract_path)
-    rag_model = RAGModel(vector_index)
+    rag_model = RAGModel(vector_index, model_name=llm_model)
     return rag_model
 
 
