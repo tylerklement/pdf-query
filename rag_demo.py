@@ -20,6 +20,13 @@ class RAGModel:
         return {'answer': output['llm_response'].strip(), 'context': retrieved_result}
 
 
+def print_answer(answer):
+    print(answer['answer'])
+    print("Excerpt searched:\n")
+    print('Score:', answer['context']['score'])
+    print('Text:\n', answer['context']['section'].text, '\n')
+
+
 def main(pdf_dir, tesseract_path, queries):
     pdf_extractor = PDFExtractor(tesseract_path)
     pdfs = pdf_extractor.load_pdfs_as_text(pdf_dir)
@@ -35,19 +42,13 @@ def main(pdf_dir, tesseract_path, queries):
             query = input("Enter question -> ")
             print("Processing answer...")
             answer = rag_model.query(query)
-            print(answer['answer'])
-            print("Excerpt searched:\n")
-            print('Score:', answer['context']['score'])
-            print('Text:\n', answer['context']['section'].text, '\n')
+            print_answer(answer)
     else:
         for query in queries:
             print(f"\nQuery: \"{query}\"")
             print("Processing answer...")
             answer = rag_model.query(query)
-            print(answer['answer'])
-            print("Excerpt searched:\n")
-            print('Score:', answer['context']['score'])
-            print('Text:\n', answer['context']['section'].text, '\n')
+            print_answer(answer)
 
 
 if __name__ == '''__main__''':
