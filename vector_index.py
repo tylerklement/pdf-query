@@ -15,7 +15,7 @@ class Document:
         self.metadata = metadata
 
     def __str__(self):
-        return f"<Document text='{self.text[:10]}...' metadata={self.metadata}>"
+        return f"<Document text='{self.text[:30]}...' metadata={self.metadata}>"
 
     def __repr__(self):
         return str(self)
@@ -30,7 +30,7 @@ class Section:
         self.parent_document = parent_document
 
     def __str__(self):
-        return f"<Section text='{self.text[:10]}...' parent_document={repr(self.parent_document)}>"
+        return f"<Section text='{self.text[:30]}...' parent_document={repr(self.parent_document)}>"
 
     def __repr__(self):
         return str(self)
